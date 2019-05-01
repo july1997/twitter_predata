@@ -2,26 +2,21 @@
 # -*- coding: utf-8 -*-
 
 import re
-import MeCab
 from datetime import datetime
 from joblib import Parallel, delayed
 from time import time 
 from more_itertools import pairwise
-
-
-def tokenizer_jp(sentence):
-  return MeCab.Tagger("-Owakati").parse(sentence)
 
 def creaning(sentence):
   sentence = re.sub(r"@([A-Za-z0-9_]+)", "", sentence)
   sentence = re.sub(r'https?:\/\/.*', "", sentence)
   return sentence
 def process(line_in, line_out, pattern): 
-    line_in = tokenizer_jp(creaning(line_in))
-    line_out = tokenizer_jp(creaning(line_out))
+    line_in = creaning(line_in)
+    line_out = creaning(line_out)
 
     if not re.match(pattern, line_in) and not re.match(pattern, line_out):
-        return (line_in, line_out)
+        return (line_in.strip(' '), line_out.strip(' '))
     return ()
 pattern = re.compile(r"^\s*$")
 
